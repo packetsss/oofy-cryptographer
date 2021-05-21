@@ -1,24 +1,45 @@
 import random
 
+class encrypt:
+    def __init__(self, sentence):
+        self.sentence = sentence
+        self.seed = 2 #random.randint(1, 1e5)
+        random.seed(self.seed)
+        
+        # determine which functions are used
+        self.sequence = []
+        self.encode_dict = {
+            "shuffle": 1,
+        }
 
-# target = input("Please input the sentence you want to encrypt: \n")
-target = "Demonstrate that if you use the same seed value twice, you will get the same random number twice"
-seed = random.randint(1, 1e5)
-# if  seed := input("Optional: provide your seed number (type \"no\" if you don't have it):\n").lower() == "no":
+        # initiate global word bag
+        self.word_bag = self.sentence.split()
 
-random.seed(2)
+        self.rand_word_bag_index = list(range(len(self.word_bag)))
+        random.shuffle(self.rand_word_bag_index)
+    
+    def shuffle(self):
+        new_word_bag = [None] * len(self.word_bag)
 
-word_bag = target.split()
-new_word_bag = [None] * len(word_bag)
-choice_range = list(range(len(word_bag)))
-random.shuffle(choice_range)
 
-# initial shuffle of inputting sentence word_bag
-for i in range(len(word_bag)):
-    choice_i = choice_range[i]
-    new_word_bag[i] = word_bag[choice_i]
+        # initial shuffle of inputting sentence word_bag
+        for i in range(len(self.word_bag)):
+            choice_i = self.rand_word_bag_index[i]
+            new_word_bag[i] = self.word_bag[choice_i]
+        
+        self.word_bag = new_word_bag
+        self.sequence.append(self.encode_dict["shuffle"])
 
-print(word_bag)
-print(new_word_bag)
+    def output(self):
+        index_to_use = self.rand_word_bag_index[:len(self.sequence)]
 
-print(" ".join(new_word_bag))
+        # inserting each sequence in word_bag
+        for i, choice in enumerate(index_to_use):
+            self.word_bag[choice] += str(self.sequence[i])
+
+        # output encrypted sentence
+        return " ".join(self.word_bag)
+
+e = encrypt("with a sense of humor, embarrassing goofs can be turned into something positive")
+e.shuffle()
+print(e.output())
