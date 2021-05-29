@@ -13,7 +13,8 @@ class decrypt:
 
     def run(self):
         decode_dict = {
-            1: self.shuffle
+            1: self.shuffle,
+            2: self.wordlock
         }
 
         function_sequence = []
@@ -24,10 +25,9 @@ class decrypt:
                 function_sequence.append(func_num)
             except:
                 break
-    
-        for x in function_sequence:
+
+        for x in reversed(function_sequence):
             decode_dict[x]()
-        self.wordlock()
         
         return self.output()
 
@@ -42,11 +42,15 @@ class decrypt:
         # run through whole wordbag and shuffle each word
         for i in range(len(self.word_bag)):
             random.shuffle(len_list := list(range(len(self.word_bag[i]))))
-            print(len_list, self.word_bag[i])
-            self.word_bag[i] = "".join([self.word_bag[i][index] for index in len_list])
+            temp_list = [None] * len(len_list)
+
+            # Loop through each word
+            for j in range(len(self.word_bag[i])):
+                temp_list[len_list[j]] = self.word_bag[i][j]
+            self.word_bag[i]  = "".join(temp_list)
 
     def output(self):
         return " ".join(self.word_bag)
 
-d = decrypt("rnuedt of fgsoo poteviis noit cna be rhmu,o snsee eiamasrgsnbr1 esonmtihg a with", 2)
+d = decrypt("rnuedt of fgsoo poteviis2 noit cna be rhmu,o snsee eiamasrgsnbr1 esonmtihg a with", 2)
 print(d.run())

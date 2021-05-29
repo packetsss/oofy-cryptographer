@@ -10,6 +10,7 @@ class encrypt:
         self.sequence = []
         self.encode_dict = {
             "shuffle": 1,
+            "wordlock": 2,
         }
 
         # initiate global word bag
@@ -34,8 +35,9 @@ class encrypt:
         # run through whole wordbag and shuffle each word
         for i in range(len(self.word_bag)):
             random.shuffle(len_list := list(range(len(self.word_bag[i]))))
-            print(len_list, self.word_bag[i])
             self.word_bag[i] = "".join([self.word_bag[i][index] for index in len_list])
+
+        self.sequence.append(self.encode_dict["wordlock"])
 
     def output(self):
         index_to_use = self.rand_word_bag_index[:len(self.sequence)]
@@ -54,3 +56,13 @@ e = encrypt("with a sense of humor, embarrassing goofs can be turned into someth
 e.shuffle()
 e.wordlock()
 print(e.output())
+
+"""
+[0, 1, 2, 3, 4]
+random.shuffle():
+[3, 0, 4, 1, 2]
+goofs -> fgsoo
+"00000"
+"00f00"
+...
+"""
