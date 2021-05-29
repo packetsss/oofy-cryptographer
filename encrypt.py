@@ -3,7 +3,7 @@ import random
 class encrypt:
     def __init__(self, sentence):
         self.sentence = sentence
-        self.seed = 2 #random.randint(1, 1e5)
+        self.seed = 2 # random.randint(1, 1e5)
         random.seed(self.seed)
         
         # determine which functions are used
@@ -21,7 +21,6 @@ class encrypt:
     def shuffle(self):
         new_word_bag = [None] * len(self.word_bag)
 
-
         # initial shuffle of inputting sentence word_bag
         for i in range(len(self.word_bag)):
             choice_i = self.rand_word_bag_index[i]
@@ -29,6 +28,14 @@ class encrypt:
         
         self.word_bag = new_word_bag
         self.sequence.append(self.encode_dict["shuffle"])
+    
+    def wordlock(self):
+        random.seed(self.seed)
+        # run through whole wordbag and shuffle each word
+        for i in range(len(self.word_bag)):
+            random.shuffle(len_list := list(range(len(self.word_bag[i]))))
+            print(len_list, self.word_bag[i])
+            self.word_bag[i] = "".join([self.word_bag[i][index] for index in len_list])
 
     def output(self):
         index_to_use = self.rand_word_bag_index[:len(self.sequence)]
@@ -36,10 +43,14 @@ class encrypt:
         # inserting each sequence in word_bag
         for i, choice in enumerate(index_to_use):
             self.word_bag[choice] += str(self.sequence[i])
+        
+        ###TODO
+        # insert self.seed into encoded sentence
 
         # output encrypted sentence
         return " ".join(self.word_bag)
 
 e = encrypt("with a sense of humor, embarrassing goofs can be turned into something positive")
 e.shuffle()
+e.wordlock()
 print(e.output())
